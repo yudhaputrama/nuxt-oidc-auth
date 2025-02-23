@@ -272,8 +272,5 @@ export function defineOidcProvider<TConfig, TRequired extends keyof (OidcProvide
 }
 
 export async function createProviderFetch(config: OidcProviderConfig) {
-  if (config.proxy) {
-    return await getProxyAgentOfetch(config.proxy!, config.ignoreProxyCertificateErrors)
-  }
   return ofetch
 }
