@@ -1,13 +1,13 @@
 {
   "name": "nuxt-oidc-auth",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "packageManager": "pnpm@9.15.4",
   "description": "OIDC authentication module for Nuxt SSR",
   "license": "MIT",
-  "homepage": "https://github.com/itpropro/nuxt-oidc-auth#readme",
-  "repository": "yudhaputrama/nuxt-oidc-auth",
+  "homepage": "https://github.com/yudhaputrama/nuxt-oidc-auth#readme",
+  "repository": "https://github.com/yudhaputrama/nuxt-oidc-auth",
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
