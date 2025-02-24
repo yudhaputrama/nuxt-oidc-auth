@@ -190,9 +190,6 @@ export interface Tokens {
 }
 
 export interface AuthSessionConfig {
-  authPassword?: string
-  password?: string
-  tokenKey?: string
   /**
    * Automatically refresh access token and session if refresh token is available (indicated by 'canRefresh' property on user object)
    * @default true
@@ -246,3 +243,9 @@ export interface AuthSessionConfig {
 }
 
 export interface ProviderSessionConfig extends Omit<AuthSessionConfig, 'maxAge' | 'cookie'> {}
+
+export interface SecretConfig {
+  sessionSecret: string
+  authSessionSecret: string
+  tokenKey: string
+}

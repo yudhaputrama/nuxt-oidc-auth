@@ -33,7 +33,7 @@ export interface LogoutHooks {
 }
 
 export async function useAuthSession(event: H3Event, maxAge: number = 300) {
-  const password = useRuntimeConfig(event).oidc.session.authPassword || process.env.NUXT_OIDC_AUTH_SESSION_SECRET as string
+  const password = useRuntimeConfig(event).oidc.secret.authSessionSecret as string
   if (!password) {
     throw createError({
       statusCode: 401,
@@ -99,7 +99,7 @@ export async function refreshUserSession(event: H3Event) {
   }
 
   // Refresh the access token
-  const tokenKey = process.env.NUXT_OIDC_TOKEN_KEY as string
+  const tokenKey = useRuntimeConfig().oidc.secret.tokenKey
   const refreshToken = await decryptToken(persistentSession.refreshToken, tokenKey)
 
   const config = configMerger(useRuntimeConfig().oidc.providers[provider] as OidcProviderConfig, providerPresets[provider])
@@ -209,13 +209,13 @@ export async function getUserSession(event: H3Event) {
   // Expose tokens if configured
   if (useRuntimeConfig(event).oidc.providers[provider]?.exposeAccessToken || providerPresets[provider].exposeAccessToken) {
     const persistentSession = await useStorage('oidc').getItem<PersistentSession>(session.id as string) as PersistentSession | null
-    const tokenKey = process.env.NUXT_OIDC_TOKEN_KEY as string
+    const tokenKey = useRuntimeConfig().oidc.secret.tokenKey as string
     if (persistentSession)
       userSession.accessToken = await decryptToken(persistentSession.accessToken, tokenKey)
   }
   if (useRuntimeConfig(event).oidc.providers[provider]?.exposeIdToken || providerPresets[provider].exposeIdToken) {
     const persistentSession = await useStorage('oidc').getItem<PersistentSession>(session.id as string) as PersistentSession | null
-    const tokenKey = process.env.NUXT_OIDC_TOKEN_KEY as string
+    const tokenKey = useRuntimeConfig().oidc.secret.tokenKey as string
     if (persistentSession?.idToken)
       userSession.idToken = await decryptToken(persistentSession.idToken, tokenKey) || undefined
   }
@@ -238,7 +238,7 @@ export async function getSingleSignOutSessionId(event: H3Event) {
 function _useSession(event: H3Event) {
   if (!sessionConfig || !Object.keys(providerSessionConfigs).length) {
     // Merge sessionConfig
-    sessionConfig = defu({ password: useRuntimeConfig().oidc.session.password || process.env.NUXT_OIDC_SESSION_SECRET!, name: sessionName }, useRuntimeConfig(event).oidc.session)
+    sessionConfig = defu({ password: useRuntimeConfig().oidc.secret.sessionSecret!, name: sessionName }, useRuntimeConfig(event).oidc.session)
     // Merge providerSessionConfigs
     Object.keys(useRuntimeConfig(event).oidc.providers).map(
       key => key as ProviderKeys,

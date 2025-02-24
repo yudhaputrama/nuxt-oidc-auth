@@ -1,5 +1,5 @@
 import type { OidcProviderConfig } from './runtime/server/utils/provider'
-import type { AuthSessionConfig, DevModeConfig, MiddlewareConfig, ProviderConfigs, ProviderKeys } from './runtime/types'
+import type { AuthSessionConfig, DevModeConfig, MiddlewareConfig, ProviderConfigs, ProviderKeys, SecretConfig } from './runtime/types'
 import { addImportsDir, addPlugin, addRouteMiddleware, addServerHandler, addServerPlugin, createResolver, defineNuxtModule, extendRouteRules, useLogger } from '@nuxt/kit'
 import { defu } from 'defu'
 import { setupDevToolsUI } from './devtools'
@@ -34,6 +34,11 @@ const DEFAULTS: ModuleOptions = {
   },
   provideDefaultSecrets: true,
   devtools: true,
+  secret: {
+    authSessionSecret: process.env.NUXT_OIDC_AUTH_SESSION_SECRET || '',
+    sessionSecret: process.env.NUXT_OIDC_SESSION_SECRET || '',
+    tokenKey: process.env.NUXT_OIDC_TOKEN_KEY || '',
+  }
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -273,4 +278,6 @@ export interface ModuleOptions {
    * @default true
    */
   provideDefaultSecrets?: boolean
+
+  secret: SecretConfig
 }
