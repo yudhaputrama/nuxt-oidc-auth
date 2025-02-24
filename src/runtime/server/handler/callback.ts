@@ -194,7 +194,7 @@ function callbackEventHandler({ onSuccess }: OAuthConfig<UserSession>) {
     }
 
     if (tokenResponse.refresh_token || config.exposeAccessToken || config.exposeIdToken) {
-      const tokenKey = process.env.NUXT_OIDC_TOKEN_KEY as string
+      const tokenKey = useRuntimeConfig().oidc.session.tokenKey || process.env.NUXT_OIDC_TOKEN_KEY as string
       const persistentSession: PersistentSession = {
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -190,7 +190,9 @@ export interface Tokens {
 }
 
 export interface AuthSessionConfig {
+  authPassword?: string
   password?: string
+  tokenKey?: string
   /**
    * Automatically refresh access token and session if refresh token is available (indicated by 'canRefresh' property on user object)
    * @default true

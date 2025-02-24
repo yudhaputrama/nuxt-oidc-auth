@@ -33,7 +33,7 @@ export interface LogoutHooks {
 }
 
 export async function useAuthSession(event: H3Event, maxAge: number = 300) {
-  const password = useRuntimeConfig(event).oidc.session.password || process.env.NUXT_OIDC_AUTH_SESSION_SECRET as string
+  const password = useRuntimeConfig(event).oidc.session.authPassword || process.env.NUXT_OIDC_AUTH_SESSION_SECRET as string
   if (!password) {
     throw createError({
       statusCode: 401,
@@ -238,7 +238,7 @@ export async function getSingleSignOutSessionId(event: H3Event) {
 function _useSession(event: H3Event) {
   if (!sessionConfig || !Object.keys(providerSessionConfigs).length) {
     // Merge sessionConfig
-    sessionConfig = defu({ password: process.env.NUXT_OIDC_SESSION_SECRET!, name: sessionName }, useRuntimeConfig(event).oidc.session)
+    sessionConfig = defu({ password: useRuntimeConfig().oidc.session.password || process.env.NUXT_OIDC_SESSION_SECRET!, name: sessionName }, useRuntimeConfig(event).oidc.session)
     // Merge providerSessionConfigs
     Object.keys(useRuntimeConfig(event).oidc.providers).map(
       key => key as ProviderKeys,
