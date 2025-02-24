@@ -33,9 +33,16 @@ export interface LogoutHooks {
 }
 
 export async function useAuthSession(event: H3Event, maxAge: number = 300) {
+  const password = useRuntimeConfig(event).oidc.session.password || process.env.NUXT_OIDC_AUTH_SESSION_SECRET as string
+  if (!password) {
+    throw createError({
+      statusCode: 401,
+      message: 'Session password not set',
+    })
+  }
   const session = await useSession<AuthSession>(event, {
     name: 'oidc',
-    password: process.env.NUXT_OIDC_AUTH_SESSION_SECRET as string,
+    password: password,
     maxAge,
   })
   return session
